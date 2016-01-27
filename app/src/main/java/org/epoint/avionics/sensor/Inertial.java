@@ -21,9 +21,14 @@ public class Inertial {
     /**
      * Maximum angular velocity drift for gyroscopes in rad/sec
      */
-    private static final double MAX_ANGULAR = Math.toRadians(10);
+    private static final double MAX_ANGULAR = Math.toRadians(2);
 
     private static final double MAX_ANGULAR2 = MAX_ANGULAR * MAX_ANGULAR;
+
+    /**
+     * Fraction of the drift to be corrected in each calibration.
+     */
+    private static final double CALIBRATION_SCALE = 0.4;
 
     /**
      * Minimum required time in nanoseconds for calibration
@@ -196,9 +201,9 @@ public class Inertial {
                     deviceToWorld = d2w;
                 } else {
                     /**
-                     * Reciprocal value of time in seconds since last recalibration
+                     * Reciprocal value of time in seconds since last recalibration, scaled
                      */
-                    double dT = 1e9 / (event.timestamp - calibrationTimestamp);
+                    double dT = CALIBRATION_SCALE * 1e9 / (event.timestamp - calibrationTimestamp);
                     Vec3D measuredDrift = d2w.mul(deviceToWorld.inv()).rot().scale(dT);
                     measuredDrift.add(gyroscopeDrift);
                     if(measuredDrift.dot(measuredDrift) < MAX_ANGULAR2)
