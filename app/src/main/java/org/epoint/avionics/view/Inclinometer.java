@@ -8,7 +8,7 @@ import android.graphics.Paint;
  */
 public class Inclinometer {
 
-    private static final float SENSITIVITY = 0.8f;
+    private static final float SENSITIVITY = 2.0f;
     private static final float WIDTH = 7f;
 
     private static float limit(float x, float w) {
